@@ -28,6 +28,7 @@
                     <input type="password" id="pass" placeholder="Enter Password"
                         name="psw" required>
                         <p id="error" style="color: red; font-weight: bold;"></p>
+                        <p id="loading" style="color: blue; font-weight: bold;"></p>
 
 
                     <div class="container " style="background-color:#f1f1f1">
@@ -59,27 +60,83 @@
         <script>
             
 
-            function func(event) {
-    event.preventDefault(); // Prevent form submission for custom validation
+//             function func(event) {
+//     event.preventDefault(); // Prevent form submission for custom validation
 
-    const email = document.getElementById('email').value;
-    const pass = document.getElementById('pass').value;
-    const errorElement = document.getElementById('error');
-    const img=document.querySelector('#a');
+//     const email = document.getElementById('email').value;
+//     const pass = document.getElementById('pass').value;
+//     const errorElement = document.getElementById('error');
+//     const img=document.querySelector('#a');
 
 
-    if (email === 'shahanand50131@gmail.com' && pass === '12345') {
-        alert('Login successful');
-        window.location.assign('a.html');
+//     if (email === 'user@example.com' && pass === 'string') {
+//         alert('Login successful');
+//         window.location.assign('a.html');
+//     } else {
+//     errorElement.innerText = '❌ Invalid email or password. Please try again!';
+//     img.src="./error.jpg.png" ;
+
+//   }
+
+// }
+async function func(event) {
+  event.preventDefault(); // Stop the form from submitting normally
+
+  const email = document.getElementById('email').value;
+  const pass = document.getElementById('pass').value;
+  const errorElement = document.getElementById('error');
+  const loading = document.getElementById('loading'); // Add this in your HTML
+  const img = document.querySelector('#a');
+
+  errorElement.innerText = "";
+  loading.innerText = "⏳ Logging in..."; // Show loading message
+  img.src = "./left.jpg.png"; // Reset image to default
+
+  try {
+    // Construct form data as x-www-form-urlencoded
+    const formData = new URLSearchParams();
+    formData.append("username", email); // FastAPI expects 'username' as email
+    formData.append("password", pass);
+
+    const response = await fetch("https://scholoopbe.onrender.com/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Connection": "keep-alive" // Optional, helps maintain fast response
+      },
+      body: formData.toString()
+    });
+
+    const data = await response.json();
+    loading.innerText = ""; // Clear loading message
+
+    if (response.ok) {
+    //   alert("✅ Login successful!");
+      window.location.assign("a.html"); // Redirect on success
     } else {
-    errorElement.innerText = '❌ Invalid email or password. Please try again!';
-    img.src="./error.jpg.png" ;
+      let errorMessage = "";
 
+      // Handle FastAPI validation errors gracefully
+      if (Array.isArray(data.detail)) {
+        errorMessage = data.detail.map(err =>
+          `${err.loc?.join(" > ") || "Error"}: ${err.msg}`
+        ).join("\n");
+      } else if (typeof data.detail === "string") {
+        errorMessage = data.detail;
+      } else {
+        errorMessage = "❌ Login failed. Please check your credentials.";
+      }
+
+      errorElement.innerText = errorMessage;
+      img.src = "./error.jpg.png"; 
+    }
+  } catch (error) {
+    loading.innerText = "";
+    errorElement.innerText = "❌ Network error. Please try again!";
+    img.src = "./error.jpg.png";
+    console.error("Connection error:", error);
   }
-
 }
-
-
 </script>
           
 </html>
