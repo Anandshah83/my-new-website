@@ -1,0 +1,84 @@
+ <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="image-element">
+            <img src="./left.jpg.png" id="a" alt="">
+        </div>
+        <div class="container1">
+            <form  id="act" onsubmit="func(event)">
+                <div class="imgcontainer">
+                    <img src="./image..jpg.png" alt="Avatar" class="avatar">
+                </div>
+                <h2 class="head">Login</h2>
+                <p>Enter your email and password to access your account</p>
+                <div class="container">
+                    <label for="uname" ><b>Email</b></label>
+                    <input type="text" id="email" placeholder="Enter your Email"
+                        name="uname" required>
+
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password" id="pass" placeholder="Enter Password"
+                        name="psw" required>
+                        <p id="error" style="color: red; font-weight: bold;"></p>
+
+
+                    <div class="container " style="background-color:#f1f1f1">
+                        <div class="box">
+
+                            <label>
+                                <input type="checkbox" id="check"
+                                    checked="checked" name="remember"> Remember
+                                me
+                            </label>
+
+                            <span class="psw" >Forgot <a
+                                    href="./forget_pass.html">password?</a></span>
+                        </div>
+                        <button type="submit">Login</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    <!-- adding vaildate form -->
+
+    
+
+
+    </body>
+        <script>
+            
+
+            function func(event) {
+    event.preventDefault(); // Prevent form submission for custom validation
+
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('pass').value;
+    const errorElement = document.getElementById('error');
+    const img=document.querySelector('#a');
+
+
+    if (email === 'shahanand50131@gmail.com' && pass === '12345') {
+        alert('Login successful');
+        window.location.assign('a.html');
+    } else {
+    errorElement.innerText = '❌ Invalid email or password. Please try again!';
+    img.src="./error.jpg.png" ;
+
+  }
+
+}
+
+
+</script>
+          
+</html>
+
+
+ 
